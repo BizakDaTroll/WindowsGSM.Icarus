@@ -4,14 +4,17 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using WindowsGSM.Functions;
 using WindowsGSM.GameServer.Engine;
+using WindowsGSM.GameServer.Query;
 using System.IO;
 using System.Net;
+using System.Linq;
+using System.Windows;
 using System.Runtime.InteropServices;
 
 namespace WindowsGSM.Plugins
 {
-      public class Icarus : SteamCMDAgent
-      {
+    public class Icarus : SteamCMDAgent
+    {
         [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileString")]
         public static extern bool WritePrivateProfileString(string strSection,
                                                             string strKeyName,
@@ -37,15 +40,15 @@ namespace WindowsGSM.Plugins
         // - Settings properties for SteamCMD installer
         public override bool loginAnonymous => true;
         public override string AppId => "2089300";
-        
+
 
 
 
         // - Game server Fixed variables
-        public override string StartPath => @"IcarusServer-Win64-Shipping.exe";
+        public override string StartPath => @"Icarus\Binaries\win64\IcarusServer-Win64-Shipping.exe";
         public string FullName = "Icarus Dedicated Server";
         public bool AllowsEmbedConsole = true;
-        public int PortIncrements = 1;
+        public int PortIncrements = 10;
         public object QueryMethod = null;
 
 
@@ -70,15 +73,15 @@ namespace WindowsGSM.Plugins
                 {
                     await IcarusCFG.DownloadFileTaskAsync(IcarusCFGURL, configPath);
                 }
-            string section = "/Script/Icarus.DedicatedServerSettings";
-            WritePrivateProfileString(section, "MaxPlayers", Maxplayers, configPath);
+                string section = "/Script/Icarus.DedicatedServerSettings";
+                WritePrivateProfileString(section, "MaxPlayers", Maxplayers, configPath);
             }
             catch (Exception e)
             {
-                Error = e.Message;
+                Error = "CFG Error" + e.Message;
                 return;
             }
-        
+
         }
 
         // - Start server function, return its Process to WindowsGSM
@@ -94,7 +97,7 @@ namespace WindowsGSM.Plugins
             // Prepare start parameter
 
             string param = $"{_serverData.ServerParam}";
-            param += " -log";
+            param += "-NOSTEAM -log";
             param += string.IsNullOrWhiteSpace(_serverData.ServerPort) ? string.Empty : $" -PORT={_serverData.ServerPort}";
             param += string.IsNullOrWhiteSpace(_serverData.ServerQueryPort) ? string.Empty : $" -QueryPort={_serverData.ServerQueryPort}";
             param += string.IsNullOrWhiteSpace(_serverData.ServerName) ? string.Empty : $" -SteamServerName={_serverData.ServerName}";
@@ -168,5 +171,5 @@ namespace WindowsGSM.Plugins
             });
             await Task.Delay(20000);
         }
-      }
+    }
 }
