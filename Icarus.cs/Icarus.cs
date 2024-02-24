@@ -100,7 +100,7 @@ namespace WindowsGSM.Plugins
             param += "-NOSTEAM -log";
             param += string.IsNullOrWhiteSpace(_serverData.ServerPort) ? string.Empty : $" -PORT={_serverData.ServerPort}";
             param += string.IsNullOrWhiteSpace(_serverData.ServerQueryPort) ? string.Empty : $" -QueryPort={_serverData.ServerQueryPort}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerName) ? string.Empty : $" -SteamServerName={_serverData.ServerName}";
+            param += string.IsNullOrWhiteSpace(_serverData.ServerName) ? string.Empty : $" -SteamServerName=\"{_serverData.ServerName}\"";
             // param += string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer) ? string.Empty : $" -MaxPlayers={_serverData.ServerMaxPlayer}";
 
 
