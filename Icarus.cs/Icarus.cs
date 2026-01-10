@@ -26,7 +26,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGMS.Icarus",
             author = "BizakDaTroll",
             description = "WindowsGMS plugin for Icarus Dedicated Server",
-            version = "0.5",
+            version = "0.6",
             url = "https://github.com/BizakDaTroll/WindowsGSM",
             color = "#ffffff"
         };
@@ -170,6 +170,16 @@ namespace WindowsGSM.Plugins
                 Functions.ServerConsole.SendWaitToMainWindow("^c");
             });
             await Task.Delay(20000);
+        }
+        
+        // fixes WinGSM bug, https://github.com/BizakDaTroll/WindowsGSM.Icarus/issues/4#issuecomment-3730610083
+        public async Task<Process> Update(bool validate = false, string custom = null)
+        {
+            var (p, error) = await Installer.SteamCMD.UpdateEx(serverData.ServerID, AppId, validate, custom: custom, loginAnonymous: loginAnonymous);
+            Error = error;
+            await Task.Run(() => { p.WaitForExit(); });
+
+            return p;
         }
     }
 }
