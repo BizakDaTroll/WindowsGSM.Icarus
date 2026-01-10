@@ -97,7 +97,7 @@ namespace WindowsGSM.Plugins
             // Prepare start parameter
 
             string param = $"{_serverData.ServerParam}";
-            param += "-NOSTEAM -log";
+            param += " -NOSTEAM -log";
             param += string.IsNullOrWhiteSpace(_serverData.ServerPort) ? string.Empty : $" -PORT={_serverData.ServerPort}";
             param += string.IsNullOrWhiteSpace(_serverData.ServerQueryPort) ? string.Empty : $" -QueryPort={_serverData.ServerQueryPort}";
             param += string.IsNullOrWhiteSpace(_serverData.ServerName) ? string.Empty : $" -SteamServerName=\"{_serverData.ServerName}\"";
